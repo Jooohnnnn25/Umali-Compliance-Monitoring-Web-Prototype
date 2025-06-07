@@ -15,12 +15,12 @@ import { Link } from "expo-router";
 const buildingPlansImage = require("../../assets/buildingplans.png");
 
 const documents = [
-  { type: "Structural Plans", dateSubmitted: "04/05/2025", dateApproved: "04/06/2025" },
-  { type: "Mechanical Plans", dateSubmitted: "04/05/2025", dateApproved: "04/06/2025" },
-  { type: "Electrical Plans", dateSubmitted: "04/05/2025", dateApproved: "04/06/2025" },
-  { type: "Electronics Plans", dateSubmitted: "04/05/2025", dateApproved: "04/06/2025" },
-  { type: "Sanitary/Plumbing Plans", dateSubmitted: "04/05/2025", dateApproved: "04/06/2025" },
-  { type: "Architectural Plans", dateSubmitted: "04/05/2025", dateApproved: "04/06/2025" },
+  { type: "Structural Plans", dateSubmitted: "04/05/2025" },
+  { type: "Mechanical Plans", dateSubmitted: "04/05/2025" },
+  { type: "Electrical Plans", dateSubmitted: "04/05/2025" },
+  { type: "Electronics Plans", dateSubmitted: "04/05/2025" },
+  { type: "Sanitary/Plumbing Plans", dateSubmitted: "04/05/2025" },
+  { type: "Architectural Plans", dateSubmitted: "04/05/2025" },
 ];
 
 export default function ApplicationDocuments() {
@@ -46,7 +46,6 @@ export default function ApplicationDocuments() {
         <View style={styles.tableHeader}>
           <Text style={[styles.headerCell, { flex: 3 }]}>Document Type</Text>
           <Text style={[styles.headerCell, { flex: 1.2 }]}>Date Submitted</Text>
-          <Text style={[styles.headerCell, { flex: 1.2 }]}>Date Approved</Text>
           <Text style={[styles.headerCell, { flex: 1 }]}>Action</Text>
         </View>
 
@@ -54,7 +53,6 @@ export default function ApplicationDocuments() {
           <View key={idx} style={styles.tableRow}>
             <Text style={[styles.cell, { flex: 3 }]}>{doc.type}</Text>
             <Text style={[styles.cell, { flex: 1.2 }]}>{doc.dateSubmitted}</Text>
-            <Text style={[styles.cell, { flex: 1.2 }]}>{doc.dateApproved}</Text>
             <TouchableOpacity
               style={[styles.cell, { flex: 1 }]}
               onPress={handleView}

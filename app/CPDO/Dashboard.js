@@ -1,3 +1,4 @@
+// Updated
 import React, { useState } from "react";
 import {
   View,
@@ -55,12 +56,26 @@ export default function ComplianceScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [currentRemarks, setCurrentRemarks] = useState("");
   const [currentUserId, setCurrentUserId] = useState(null);
+
+  const [notificationModalVisible, setNotificationModalVisible] = useState(false);
+  const [notifiedUserName, setNotifiedUserName] = useState("");
+
   const router = useRouter();
 
   const handleStatusChange = (id, newStatus) => {
     setApplications((prev) =>
-      prev.map((app) => (app.id === id ? { ...app, status: newStatus } : app))
+      prev.map((app) =>
+        app.id === id ? { ...app, status: newStatus } : app
+      )
     );
+
+    if (newStatus === "Complete") {
+      const selectedApp = applications.find((app) => app.id === id);
+      if (selectedApp) {
+        setNotifiedUserName(selectedApp.user);
+        setNotificationModalVisible(true);
+      }
+    }
   };
 
   const openRemarksModal = (id, existingRemarks) => {
@@ -131,7 +146,6 @@ export default function ComplianceScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header with only logout icon (removed title) */}
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.logoutButton}
@@ -170,6 +184,7 @@ export default function ComplianceScreen() {
         )}
       />
 
+      {/* Modal for adding remarks */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -205,27 +220,50 @@ export default function ComplianceScreen() {
           </View>
         </View>
       </Modal>
+
+      {/* Modal for notification */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={notificationModalVisible}
+        onRequestClose={() => setNotificationModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContainer, { alignItems: "center" }]}>
+            <MaterialIcons name="notifications-active" size={50} color="#007bff" style={{ marginBottom: 10 }} />
+            <Text style={styles.modalTitle}>Notification Sent</Text>
+            <Text style={{ textAlign: "center", marginBottom: 20, fontSize: 16 }}>
+              User {notifiedUserName} is notified that their requirements are complete. 
+              Please check your email for confirmation.
+            </Text>
+
+            <Pressable
+              style={[styles.modalButton, { backgroundColor: "#007bff", width: "50%" }]}
+              onPress={() => setNotificationModalVisible(false)}
+            >
+              <Text style={{ color: "white", textAlign: "center" }}>OK</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 15, backgroundColor: "#fff" },
-
   header: {
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
     marginBottom: 15,
   },
-
   logoutButton: {
     paddingVertical: 6,
     paddingHorizontal: 12,
     backgroundColor: "blue",
     borderRadius: 5,
   },
-
   searchBar: {
     height: 40,
     borderColor: "#ccc",
@@ -254,21 +292,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     fontSize: 14,
   },
-
   viewAppButton: {
     backgroundColor: "#007bff",
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 5,
   },
-
   viewAppButtonText: {
     color: "white",
     fontWeight: "bold",
     fontSize: 14,
   },
-
-  // Modal styles
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.4)",
@@ -286,6 +320,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
+    textAlign: "center",
   },
   modalInput: {
     height: 100,
